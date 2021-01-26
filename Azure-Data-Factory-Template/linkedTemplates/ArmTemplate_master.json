@@ -1,0 +1,70 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": "AITrainingDataFactory"
+        },
+        "AIFtpServer_password": {
+            "type": "secureString",
+            "metadata": "Secure string for 'password' of 'AIFtpServer'"
+        },
+        "AIAzureStorageAccount_connectionString": {
+            "type": "secureString",
+            "metadata": "Secure string for 'connectionString' of 'AIAzureStorageAccount'"
+        },
+        "AIFtpServer_properties_typeProperties_host": {
+            "type": "string",
+            "defaultValue": "23.97.254.117"
+        },
+        "AIFtpServer_properties_typeProperties_userName": {
+            "type": "string",
+            "defaultValue": "dataaiuser"
+        },
+        "containerUri": {
+            "type": "string",
+            "metadata": "URI to storage account containing linked ARM templates"
+        },
+        "containerSasToken": {
+            "type": "string",
+            "metadata": "Sas token to storage account containing linked ARM templates"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "AITrainingDataFactory_ArmTemplate_0",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-02-01",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[parameters('factoryName')]"
+                    },
+                    "AIFtpServer_password": {
+                        "value": "[parameters('AIFtpServer_password')]"
+                    },
+                    "AIAzureStorageAccount_connectionString": {
+                        "value": "[parameters('AIAzureStorageAccount_connectionString')]"
+                    },
+                    "AIFtpServer_properties_typeProperties_host": {
+                        "value": "[parameters('AIFtpServer_properties_typeProperties_host')]"
+                    },
+                    "AIFtpServer_properties_typeProperties_userName": {
+                        "value": "[parameters('AIFtpServer_properties_typeProperties_userName')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}
